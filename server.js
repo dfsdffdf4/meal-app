@@ -33,6 +33,20 @@ function saveData(data) {
 let data = loadData();
 const devices = {};
 
+
+// Auto-delete orders older than 7 days
+function cleanupOldOrders() {
+  const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const before = data.orders.length;
+  data.orders = data.orders.filter(o => o.id > sevenDaysAgo);
+  if (data.orders.length < before) {
+    saveData(data);
+    console.log('Cleaned up ' + (before - data.orders.length) + ' old orders (7-day limit)');
+  }
+}
+setInterval(cleanupOldOrders, 60 * 60 * 1000); // Run every hour
+cleanupOldOrders(); // Run on startup
+
 io.on('connection', (socket) => {
   console.log('Connected:', socket.id);
 
@@ -112,3 +126,4 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log('💡 两台手机都打开上面的地址，选择不同身份即可使用');
   console.log('');
 });
+

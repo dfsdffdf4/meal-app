@@ -141,6 +141,11 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .order-flash.show{transform:translateY(0)}
 .flash-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;font-size:18px;cursor:pointer}
 @media(min-width:480px){.dish-grid{grid-template-columns:repeat(3,1fr)}}
+
+.steps-badge{display:inline-block;background:var(--pri-l);color:var(--pri);padding:2px 8px;border-radius:8px;font-size:10px;margin-top:4px;cursor:pointer}
+.step-item{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
+.step-text{flex:1;color:var(--txt)}
 </style>
 </head>
 <body>
@@ -413,7 +418,7 @@ else{var cat=CATS.find(function(c){return c.id===S.cat;});area.innerHTML='<div c
 function dishCard(d){
 var ic=S.cart[d.id];var fav=S.favs[d.id];
 var tags=d.t.map(function(t,i){var cls=Array.isArray(d.tc)?(d.tc[i]||''):(i===0&&d.tc?d.tc:'');return '<span class="tag '+cls+'">'+t+'</span>';}).join('');
-return '<div class="dish-card '+(ic?'in-cart':'')+'"><div class="dish-emoji">'+d.e+'<span class="qty-dot">'+(ic?ic.qty:'')+'</span><button class="fav-heart" onclick="toggleFav('+d.id+',event)">'+(fav?'❤️':'♡')+'</button></div><div class="dish-body"><div class="dish-nm">'+d.n+'</div><div class="dish-desc">'+d.d+'</div><div class="dish-tags">'+tags+'</div><input class="dish-note" placeholder="备注（少盐/多辣/不要葱...）" value="'+(ic?(ic.note||''):'')+'" onchange="setNote('+d.id+',this.value)"><button class="add-btn '+(ic?'added':'')+'" onclick="toggleDish('+d.id+')">'+(ic?'✔ 已选 '+ic.qty+' 份':'+ 加入菜单')+'</button></div></div>';
+return '<div class="dish-card '+(ic?'in-cart':'')+'"><div class="dish-emoji">'+d.e+'<span class="qty-dot">'+(ic?ic.qty:'')+'</span><button class="fav-heart" onclick="toggleFav('+d.id+',event)">'+(fav?'❤️':'♡')+'</button></div><div class="dish-body"><div class="dish-nm">'+d.n+'</div><div class="dish-desc">'+d.d+'</div><div class="dish-tags">'+tags+'</div><input class="dish-note" placeholder="备注（少盐/多辣/不要葱...）" value="'+(ic?(ic.note||''):'')+'" onchange="setNote('+d.id+',this.value)"><span class="steps-badge" onclick="showSteps('+d.id+')">📋 做法</span><button class="add-btn '+(ic?'added':'')+'" onclick="toggleDish('+d.id+')">'+(ic?'✔ 已选 '+ic.qty+' 份':'+ 加入菜单')+'</button></div></div>';
 }
 function toggleDish(id){if(S.cart[id])delete S.cart[id];else S.cart[id]={qty:1,note:''};renderDishes();updateBadges();}
 function setNote(id,v){if(S.cart[id])S.cart[id].note=v;}
@@ -471,9 +476,30 @@ function openEdit(){document.getElementById('editH').value=S.names.husband;docum
 function closeEdit(){document.getElementById('editModal').classList.remove('show');}
 function saveNames(){var h=document.getElementById('editH').value.trim()||'老公';var w=document.getElementById('editW').value.trim()||'老婆';S.names={husband:h,wife:w};socket.emit('updateNames',S.names);closeEdit();renderMePage();showToast('称呼已更新');}
 function clearOrders(){if(confirm('确定清空所有历史订单？')){S.orders=[];renderOrderPage();renderMePage();showToast('已清空');}}
+
+function showSteps(id){
+var d=D.find(function(x){return x.id===id;});
+if(!d||!d.steps)return;
+document.getElementById('stepsTitle').textContent=d.e+' '+d.n;
+document.getElementById('stepsContent').innerHTML=d.steps.map(function(s,i){
+return '<div class="step-item"><div class="step-num">'+(i+1)+'</div><div class="step-text">'+s+'</div></div>';
+}).join('');
+document.getElementById('stepsModal').classList.add('show');
+}
+function closeSteps(){document.getElementById('stepsModal').classList.remove('show');}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1500);}
 
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(function(){});}
 </script>
+
+<div class="overlay" id="stepsModal">
+<div class="modal-card" style="text-align:left;max-height:80vh;overflow-y:auto;padding:24px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<h2 id="stepsTitle" style="font-size:20px;margin:0"></h2>
+<button onclick="closeSteps()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#999">&times;</button>
+</div>
+<div id="stepsContent" style="font-size:14px;line-height:2"></div>
+</div>
+</div>
 </body>
 </html>
