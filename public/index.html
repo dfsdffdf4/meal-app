@@ -472,6 +472,8 @@ function closeEdit(){document.getElementById('editModal').classList.remove('show
 function saveNames(){var h=document.getElementById('editH').value.trim()||'老公';var w=document.getElementById('editW').value.trim()||'老婆';S.names={husband:h,wife:w};socket.emit('updateNames',S.names);closeEdit();renderMePage();showToast('称呼已更新');}
 function clearOrders(){if(confirm('确定清空所有历史订单？')){S.orders=[];renderOrderPage();renderMePage();showToast('已清空');}}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1500);}
+
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(function(){});}
 </script>
 </body>
 </html>
