@@ -1,0 +1,14 @@
+{
+  "name": "meal-app",
+  "version": "1.0.0",
+  "description": "专属家庭点菜 App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "socket.io": "^4.8.0",
+    "cors": "^2.8.5"
+  }
+}
