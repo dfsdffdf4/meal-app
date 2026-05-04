@@ -154,8 +154,8 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 <h1>今天吃什么？</h1>
 <p>专属家庭点菜 App</p>
 <div class="login-btns">
-<button class="login-btn" onclick="login('husband')"><span style="font-size:28px">👨</span> 我是老公</button>
-<button class="login-btn" onclick="login('wife')"><span style="font-size:28px">👩</span> 我是老婆</button>
+<button class="login-btn" onclick="login('husband')"><span style="font-size:28px">👨</span> 我是小豪</button>
+<button class="login-btn" onclick="login('wife')"><span style="font-size:28px">👩</span> 我是韶涵</button>
 </div>
 </div>
 <div class="app" id="appMain" style="display:none">
@@ -168,8 +168,8 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 </div>
 <div class="page-scroll">
 <div class="person-bar">
-<button class="person-tab active" data-p="husband" onclick="setPerson('husband')">👨 老公点菜</button>
-<button class="person-tab" data-p="wife" onclick="setPerson('wife')">👩 老婆点菜</button>
+<button class="person-tab active" data-p="husband" onclick="setPerson('husband')">👨 小豪点菜</button>
+<button class="person-tab" data-p="wife" onclick="setPerson('wife')">👩 韶涵点菜</button>
 </div>
 <div class="search-wrap"><div class="search-box">
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -206,7 +206,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 <div class="cart-footer"><div class="cart-total"><div class="cart-total-label">共 <span id="cartQty">0</span> 道菜</div></div><button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>下单啦 ❤️</button></div>
 </div>
 <div class="overlay" id="successModal"><div class="modal-card"><div class="big">💕</div><h2 id="successTitle">菜单已发送！</h2><p id="successMsg"></p><div class="modal-detail" id="successDetail"></div><button class="modal-btn" onclick="closeSuccess()">好的，收到！</button></div></div>
-<div class="overlay" id="editModal"><div class="edit-card"><h3>✏️ 修改称呼</h3><div class="edit-field"><label>老公的称呼</label><input id="editH"></div><div class="edit-field"><label>老婆的称呼</label><input id="editW"></div><div class="edit-btns"><button class="edit-cancel" onclick="closeEdit()">取消</button><button class="edit-save" onclick="saveNames()">保存</button></div></div></div>
+<div class="overlay" id="editModal"><div class="edit-card"><h3>✏️ 修改称呼</h3><div class="edit-field"><label>小豪的称呼</label><input id="editH"></div><div class="edit-field"><label>韶涵的称呼</label><input id="editW"></div><div class="edit-btns"><button class="edit-cancel" onclick="closeEdit()">取消</button><button class="edit-save" onclick="saveNames()">保存</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="order-flash" id="orderFlash"><span id="flashText"></span><button class="flash-close" onclick="hideFlash()">×</button></div>
 <script src="/socket.io/socket.io.js"></script>
@@ -362,7 +362,7 @@ var D=[
 {id:148,n:'尖椒鸡',c:'spicy',e:'🌶️',d:'鸡肉嫩滑，尖椒鲜辣',t:['辣','快手'],tc:'spicy',steps:["鸡腿肉切块加料酒生抽淀粉腌十五分钟","青尖椒切段，备好蒜片姜片花椒","热锅凉油，下鸡块滑炒至变色后盛出","锅留底油，下花椒蒜片姜片爆香","下青椒大火翻炒，倒回鸡块加盐调味出锅"]}
 ];
 var CATS=[{id:'all',name:'全部',em:'🍽️'},{id:'meat',name:'荤菜',em:'🥩'},{id:'seafood',name:'海鲜',em:'🦐'},{id:'veg',name:'素菜',em:'🥬'},{id:'soup',name:'汤品',em:'🍲'},{id:'staple',name:'主食',em:'🍚'},{id:'noodle',name:'面食',em:'🍜'},{id:'cold',name:'凉菜',em:'🥒'},{id:'snack',name:'小吃',em:'🥟'},{id:'dessert',name:'甜品',em:'🍰'},{id:'drink',name:'饮品',em:'🧋'},{id:'quick',name:'快手菜',em:'⚡'},{id:'homestyle',name:'家常菜',em:'🏠'},{id:'spicy',name:'无辣不欢',em:'🌶️'}];
-var S={cat:'all',cart:{},person:'husband',orders:[],favs:{},names:{husband:'老公',wife:'老婆'}};
+var S={cat:'all',cart:{},person:'husband',orders:[],favs:{},names:{husband:'小豪',wife:'韶涵'}};
 var socket=null;
 function initSocket(){
 socket=io();
@@ -474,7 +474,7 @@ body.innerHTML='<div class="me-profile"><div class="me-avatars"><div class="me-a
 }
 function openEdit(){document.getElementById('editH').value=S.names.husband;document.getElementById('editW').value=S.names.wife;document.getElementById('editModal').classList.add('show');}
 function closeEdit(){document.getElementById('editModal').classList.remove('show');}
-function saveNames(){var h=document.getElementById('editH').value.trim()||'老公';var w=document.getElementById('editW').value.trim()||'老婆';S.names={husband:h,wife:w};socket.emit('updateNames',S.names);closeEdit();renderMePage();showToast('称呼已更新');}
+function saveNames(){var h=document.getElementById('editH').value.trim()||'小豪';var w=document.getElementById('editW').value.trim()||'韶涵';S.names={husband:h,wife:w};socket.emit('updateNames',S.names);closeEdit();renderMePage();showToast('称呼已更新');}
 function clearOrders(){if(confirm('确定清空所有历史订单？')){S.orders=[];renderOrderPage();renderMePage();showToast('已清空');}}
 
 function showSteps(id){

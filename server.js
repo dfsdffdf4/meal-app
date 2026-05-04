@@ -17,7 +17,7 @@ const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 const DATA_KEY = 'meal-app:data';
 
-const defaultData = { orders: [], names: { husband: '老公', wife: '老婆' }, favs: {} };
+const defaultData = { orders: [], names: { husband: '小豪', wife: '韶涵' }, favs: {} };
 
 async function loadData() {
   if (!REDIS_URL || !REDIS_TOKEN) {
