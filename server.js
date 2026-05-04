@@ -123,6 +123,20 @@ function getOnlineDevices() {
 app.get('/api/data', (req, res) => res.json(data));
 app.get('/api/health', (req, res) => res.json({ status: 'ok', devices: Object.keys(devices).length }));
 
+// REST API for fast status updates
+app.post('/api/order-status', (req, res) => {
+  const { orderId, status } = req.body;
+  const order = data.orders.find(o => o.id === orderId);
+  if (order) {
+    order.status = status;
+    saveData(data);
+    io.emit('orderUpdated', order);
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Order not found' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 
 // Load data from Redis, then start server

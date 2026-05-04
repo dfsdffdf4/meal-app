@@ -465,7 +465,7 @@ var statusBtns=isReceiver?'<div class="order-status-btns"><button class="order-s
 return '<div class="order-card"><div class="order-card-hd"><span class="order-card-status '+o.status+'">'+sm[o.status]+'</span><span class="order-card-time">'+o.time+'</span></div><div class="order-card-items">'+o.items.map(function(i){return '<span class="order-card-item">'+i.e+' '+i.n+'</span>';}).join('')+'</div><div class="order-card-hd2"><span class="order-card-person">'+pn+'点的</span><span>'+o.items.reduce(function(a,b){return a+b.qty;},0)+' 道菜</span></div>'+statusBtns+'</div>';
 }).join('');
 }
-function setStatus(id,status){var o=S.orders.find(function(x){return x.id===id});if(o){o.status=status;renderOrderPage();}socket.emit('updateStatus',{orderId:id,status:status});}
+function setStatus(id,status){var o=S.orders.find(function(x){return x.id===id});if(o){o.status=status;renderOrderPage();}fetch('/api/order-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId:id,status:status})});}
 function renderMePage(){
 var body=document.getElementById('meBody');
 var totalOrders=S.orders.length,totalDishes=0,dishSet={};
