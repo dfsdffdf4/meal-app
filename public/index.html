@@ -378,7 +378,7 @@ if('Notification' in window&&Notification.permission==='granted'){new Notificati
 }
 S.orders.unshift(o);renderDishes();updateBadges();
 });
-socket.on('orderUpdated',function(o){var idx=S.orders.findIndex(function(x){return x.id===o.id});if(idx>=0)S.orders[idx]=o;});
+socket.on('orderUpdated',function(o){var idx=S.orders.findIndex(function(x){return x.id===o.id});if(idx>=0)S.orders[idx]=o;renderOrderPage();});
 socket.on('namesUpdated',function(n){S.names=n;});
 socket.on('deviceStatus',function(s){
 var el=document.getElementById('onlineStatus');if(!el)return;
